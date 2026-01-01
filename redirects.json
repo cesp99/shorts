@@ -1,0 +1,16 @@
+{
+  "redirects": {
+    "KCyvgPcY": "https://apps.apple.com/app/eyed-out-private-web-browser/id6475011990",
+    "04UA2tUW": "https://fingerprint.eyed.to",
+    "6xVIFid8": "https://github.com/cesp99/eyed-fingerprint",
+    "4oFomaOg": "https://apps.apple.com/app/id6475011990",
+    "pass-apl": "https://apps.apple.com/app/eyed-pass-private-vault/id6740422484",
+    "pass-and": "https://play.google.com/store/apps/details?id=de.aploi.eyedpass",
+    "RwRcHzrJ": "https://works.hcommons.org/records/wvqv2-k7y89",
+    "dither-and": "https://play.google.com/store/apps/details?id=de.aploi.ditherbyeyed",
+    "dither-ios": "https://apps.apple.com/app/dither-by-eyed-photo-editor/id6751736178",
+    "manifesto": "https://aploi.de/manifesto/en/"
+  },
+  "defaultRedirect": "https://aploi.de/eyed",
+  "caseSensitive": true
+}

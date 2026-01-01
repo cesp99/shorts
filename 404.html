@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Redirecting...</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background: #f5f5f5;
+        }
+        .container {
+            text-align: center;
+            padding: 2rem;
+        }
+        .spinner {
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid #3498db;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 1rem;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        .error {
+            color: #e74c3c;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="spinner"></div>
+        <p id="message">Redirecting...</p>
+    </div>
+
+    <script>
+        (function() {
+            // Get the current path
+            const path = window.location.pathname;
+
+            // Extract the shortcode (remove leading/trailing slashes)
+            let shortcode = path.replace(/^\/+|\/+$/g, '');
+
+            // Handle potential base path (e.g., if hosted at /shorts/)
+            const parts = shortcode.split('/');
+            if (parts.length > 1) {
+                shortcode = parts[parts.length - 1];
+            }
+
+            // Build the correct path to redirects.json
+            const origin = window.location.origin;
+            const pathSegments = window.location.pathname.split('/').filter(p => p);
+            pathSegments.pop();
+            const basePath = pathSegments.length > 0 ? '/' + pathSegments.join('/') + '/' : '/';
+
+            fetch(origin + basePath + 'redirects.json')
+                .then(response => {
+                    if (!response.ok) throw new Error('Failed to load config');
+                    return response.json();
+                })
+                .then(data => {
+                    // Check for special cases (visiting 404.html directly, index.html, or empty)
+                    if (!shortcode || shortcode === '404.html' || shortcode === 'index.html') {
+                        if (data.defaultRedirect) {
+                            window.location.replace(data.defaultRedirect);
+                        }
+                        return;
+                    }
+
+                    // Look up the shortcode
+                    let redirectUrl = data.redirects[shortcode];
+                    if (!redirectUrl && !data.caseSensitive) {
+                        redirectUrl = data.redirects[shortcode.toLowerCase()];
+                    }
+
+                    if (redirectUrl) {
+                        // Instant redirect, no messages
+                        window.location.replace(redirectUrl);
+                    } else {
+                        // Only show error if shortcode not found
+                        const messageEl = document.getElementById('message');
+                        messageEl.className = 'error';
+                        messageEl.textContent = `Short link "/${shortcode}" not found.`;
+                        document.querySelector('.spinner').style.display = 'none';
+
+                        if (data.defaultRedirect) {
+                            setTimeout(() => window.location.replace(data.defaultRedirect), 2000);
+                        }
+                    }
+                })
+                .catch(error => {
+                    const messageEl = document.getElementById('message');
+                    messageEl.className = 'error';
+                    messageEl.textContent = 'Failed to load redirects.';
+                    document.querySelector('.spinner').style.display = 'none';
+                    console.error('Error:', error);
+                });
+        })();
+    </script>
+</body>
+</html>
