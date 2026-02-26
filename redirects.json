@@ -10,6 +10,7 @@
     "dither-and": "https://play.google.com/store/apps/details?id=de.aploi.ditherbyeyed",
     "dither-ios": "https://apps.apple.com/app/dither-by-eyed-photo-editor/id6751736178",
     "manifesto": "https://aploi.de/manifesto/en/"
+    "sussurro-install.sh": "https://raw.githubusercontent.com/cesp99/sussurro/master/scripts/install.sh"
   },
   "defaultRedirect": "https://aploi.de/eyed",
   "caseSensitive": true
